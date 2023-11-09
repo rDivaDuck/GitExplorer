@@ -27,7 +27,7 @@ class MainCoordinator: NSObject, Coordinator {
 	}
 
 	func showMain() {
-		let mainView = MainView(coordinator: self)
+		let mainView = MainView(coordinator: self, viewModel: MainViewModel())
 		let mainViewController = UIHostingController(rootView: mainView)
 		rootViewController = mainViewController
 		navigationController.navigationBar.prefersLargeTitles = true

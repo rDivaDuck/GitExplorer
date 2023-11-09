@@ -14,7 +14,7 @@ struct SplashView: View {
 	var body: some View {
 		ZStack {
 			Color(Asset.Colors.Primary.background)
-			Image(Asset.Images.Placeholder.rDuck)
+			Image(Asset.Images.Splash.logo)
 				.resizable()
 				.scaledToFit()
 				.frame(height: 149)
