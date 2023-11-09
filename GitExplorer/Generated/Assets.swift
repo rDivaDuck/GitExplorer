@@ -37,9 +37,10 @@ internal enum Asset {
   }
   internal enum Images {
     internal enum Icons {
+      internal static let arrow = ImageAsset(name: "Icons/Arrow")
       internal static let empty = ImageAsset(name: "Icons/Empty")
       internal static let placeholder = ImageAsset(name: "Icons/Placeholder")
-      internal static let arrow = ImageAsset(name: "Icons/arrow")
+      internal static let spyglass = ImageAsset(name: "Icons/Spyglass")
     }
     internal enum Placeholder {
       internal static let rDuck = ImageAsset(name: "Placeholder/rDuck")

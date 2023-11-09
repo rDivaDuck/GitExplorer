@@ -6,7 +6,11 @@
 */
 
 "search.title" = "Repository library";
+"search.prompt" = "Search for repository";
 "search.results" = "%@ results";
+
+"search.empty.title" = "A little empty";
+"search.empty.body" = "Search for a repository and save it as favourite";
 
 "details.forks" = "Forks";
 "details.issues" = "Issues";

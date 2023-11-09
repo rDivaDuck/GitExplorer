@@ -22,6 +22,12 @@ internal enum L10n {
   }
   /// Stared by
   internal static let detailsStarred = L10n.tr("Localizable", "details.starred", fallback: "Stared by")
+  /// Search for a repository and save it as favourite
+  internal static let searchEmptyBody = L10n.tr("Localizable", "search.empty.body", fallback: "Search for a repository and save it as favourite")
+  /// A little empty
+  internal static let searchEmptyTitle = L10n.tr("Localizable", "search.empty.title", fallback: "A little empty")
+  /// Search for repository
+  internal static let searchPrompt = L10n.tr("Localizable", "search.prompt", fallback: "Search for repository")
   /// %@ results
   internal static func searchResults(_ p1: Any) -> String {
     return L10n.tr("Localizable", "search.results", String(describing: p1), fallback: "%@ results")
