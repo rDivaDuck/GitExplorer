@@ -35,7 +35,7 @@ class MainCoordinator: NSObject, Coordinator {
 	}
 
 	func present(_ repository: Repository) {
-		let repositoryView = RepositoryView(repository: repository)
+		let repositoryView = RepositoryView(viewModel: RepositoryViewModel(repository))
 		let viewController = UIHostingController(rootView: repositoryView)
 		viewController.navigationItem.backButtonDisplayMode = .default
 		navigationController.pushViewController(viewController, animated: true)

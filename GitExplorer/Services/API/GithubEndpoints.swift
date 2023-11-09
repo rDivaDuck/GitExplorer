@@ -11,11 +11,14 @@ enum GithubEndpoints {
 
 	enum Repositories: Endpoint {
 		case search(_ query: String)
+		case tags(_ fullName: String)
 
 		var relativePath: String {
 			switch self {
 				case .search:
 					return "search/repositories"
+				case .tags(let fullName):
+					return "repos/\(fullName)/tags"
 			}
 		}
 
@@ -23,6 +26,8 @@ enum GithubEndpoints {
 			switch self {
 				case .search(let query):
 					return [URLQueryItem(name: "q", value: query)]
+				case .tags:
+					return []
 			}
 		}
 

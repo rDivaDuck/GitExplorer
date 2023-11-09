@@ -9,7 +9,7 @@ import SwiftUI
 
 struct RepositoryView: View {
 
-	let repository: Repository
+	@ObservedObject var viewModel: RepositoryViewModel
 
 	var body: some View {
 		VStack(spacing: 0) {
@@ -22,7 +22,7 @@ struct RepositoryView: View {
 	var header: some View {
 		VStack(spacing: 0) {
 			AsyncImage(
-				url: URL(string: repository.owner?.avatarURL ?? ""),
+				url: URL(string: viewModel.repository.owner?.avatarURL ?? ""),
 				content: { image in
 					image
 						.resizable()
@@ -35,10 +35,10 @@ struct RepositoryView: View {
 						.frame(maxHeight: 100)
 				}
 			)
-			Text("\(repository.name ?? "") / \(repository.owner?.name ?? "")")
+			Text("\(viewModel.repository.name ?? "") / \(viewModel.repository.owner?.name ?? "")")
 				.font(.system(size: 16, weight: .medium))
 				.padding(.top, 14)
-			Text(repository.language ?? "")
+			Text(viewModel.repository.language ?? "")
 				.font(.system(size: 14))
 				.foregroundStyle(Color(Asset.Colors.Secondary.text))
 				.padding(.top, 6)
@@ -53,8 +53,7 @@ struct RepositoryView: View {
 			Divider()
 			starred
 			Divider()
-			Text("Last updated")
-				.frame(maxWidth: .infinity, alignment: .leading)
+			lastRelease
 		}
 		.foregroundColor(Color(Asset.Colors.Primary.text))
 		.font(.system(size: 14))
@@ -69,7 +68,7 @@ struct RepositoryView: View {
 
 	var forks: some View {
 		LabeledContent {
-			Text(repository.forksCount?.description ?? "")
+			Text(viewModel.repository.forksCount?.description ?? "")
 		} label: {
 			Text("Forks")
 		}
@@ -77,7 +76,7 @@ struct RepositoryView: View {
 
 	var issues: some View {
 		LabeledContent {
-			Text(repository.openIssuesCount?.description ?? "")
+			Text(viewModel.repository.openIssuesCount?.description ?? "")
 		} label: {
 			Text("Issues")
 		}
@@ -85,13 +84,21 @@ struct RepositoryView: View {
 
 	var starred: some View {
 		LabeledContent {
-			Text(repository.stargazersCount?.description ?? "")
+			Text(viewModel.repository.stargazersCount?.description ?? "")
 		} label: {
-			Text("Starred")
+			Text("Starred by")
+		}
+	}
+
+	var lastRelease: some View {
+		LabeledContent {
+			Text(viewModel.releaseVersion)
+		} label: {
+			Text("Last release version")
 		}
 	}
 }
 
 #Preview {
-	RepositoryView(repository: .preview())
+	RepositoryView(viewModel: .preview())
 }
