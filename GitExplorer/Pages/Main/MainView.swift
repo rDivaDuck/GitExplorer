@@ -18,13 +18,7 @@ struct MainView: View {
 			if viewModel.repositories.isEmpty {
 				EmptyStateView()
 			} else {
-				ScrollView {
-					resultsCount
-					LazyVStack(spacing: 24) {
-						results
-					}
-					.padding(.horizontal, 20)
-				}
+				resultStack
 			}
 		}.toolbar {
 			ToolbarItem(placement: .topBarLeading) {
@@ -55,7 +49,18 @@ struct MainView: View {
 			.font(.system(size: 14))
 			.foregroundStyle(Color(Asset.Colors.Secondary.text))
 			.padding(.top, 40)
-			.padding([.horizontal, .bottom], 20)
+	}
+
+	var resultStack: some View {
+		ScrollView {
+			VStack(spacing: 20) {
+				resultsCount
+				LazyVStack(spacing: 24) {
+					results
+				}
+			}
+			.padding(.horizontal, 20)
+		}
 	}
 }
 
