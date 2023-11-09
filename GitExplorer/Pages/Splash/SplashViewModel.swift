@@ -13,7 +13,7 @@ class SplashViewModel: ObservableObject {
 
 	@MainActor
 	func fetch() async {
-		try? await Task.sleep(for: .seconds(3))
+		try? await Task.sleep(for: .seconds(0.1))
 		self.dismiss = true
 	}
 }
