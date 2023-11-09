@@ -23,6 +23,9 @@ class MainViewModel: ObservableObject {
 	private func setupSubscriptions() {
 		$searchText
 			.dropFirst()
+			.removeDuplicates()
+			.filter { $0.count > 2 }
+			.debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
 			.print("*")
 			.sink { [weak self] query in
 				self?.search(for: query)

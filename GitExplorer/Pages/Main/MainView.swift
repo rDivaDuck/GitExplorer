@@ -24,8 +24,9 @@ struct MainView: View {
 					Text(repo.name ?? "")
 				}
 			}
+			.searchable(text: $viewModel.searchText, prompt: Text("search something"))
 		}.onAppear {
-			viewModel.searchText = "stra"
+//			viewModel.searchText = "stra"
 		}
 	}
 }

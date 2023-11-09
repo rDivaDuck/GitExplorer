@@ -30,7 +30,7 @@ class MainCoordinator: NSObject, Coordinator {
 		let mainView = MainView(coordinator: self, viewModel: MainViewModel())
 		let mainViewController = UIHostingController(rootView: mainView)
 		rootViewController = mainViewController
-		navigationController.navigationBar.prefersLargeTitles = true
+		navigationController.navigationBar.isHidden = false
 		navigationController.setViewControllers([rootViewController], animated: false)
 	}
 
