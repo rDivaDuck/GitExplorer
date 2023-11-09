@@ -66,6 +66,6 @@ struct MainView: View {
 
 #Preview {
 	NavigationStack {
-		MainView(coordinator: MainCoordinator(navigationController: UINavigationController()), viewModel: .preview())
+		MainView(coordinator: .preview(), viewModel: .preview())
 	}
 }
