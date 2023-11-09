@@ -22,7 +22,7 @@ struct MainView: View {
 			}
 		}.toolbar {
 			ToolbarItem(placement: .topBarLeading) {
-				Text("Repository Library")
+				Text(L10n.searchTitle)
 					.font(.system(size: 20, weight: .semibold))
 			}
 		}
@@ -44,7 +44,7 @@ struct MainView: View {
 	}
 
 	var resultsCount: some View {
-		Text("\(viewModel.resultCount) results")
+		Text(L10n.searchResults(viewModel.resultCount))
 			.frame(maxWidth: .infinity, alignment: .leading)
 			.font(.system(size: 14))
 			.foregroundStyle(Color(Asset.Colors.Secondary.text))

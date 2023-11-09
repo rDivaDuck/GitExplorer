@@ -36,7 +36,7 @@ struct RepositoryView: View {
 				}
 			)
 			.accessibilityHidden(true)
-			Text("\(viewModel.repository.name ?? "") / \(viewModel.repository.owner?.name ?? "")")
+			Text(L10n.detailsRepositoryTitle(viewModel.repository.owner?.name ?? "", viewModel.repository.name ?? ""))
 				.font(.system(size: 16, weight: .medium))
 				.foregroundColor(Color(Asset.Colors.Primary.text))
 				.padding(.top, 14)
@@ -50,11 +50,11 @@ struct RepositoryView: View {
 	var infoStack: some View {
 		VStack(spacing: 14) {
 			forks
-			Divider()
+			GitDivider()
 			issues
-			Divider()
+			GitDivider()
 			starred
-			Divider()
+			GitDivider()
 			lastRelease
 		}
 		.foregroundColor(Color(Asset.Colors.Primary.text))
@@ -72,7 +72,7 @@ struct RepositoryView: View {
 		LabeledContent {
 			Text(viewModel.repository.forksCount?.description ?? "")
 		} label: {
-			Text("Forks")
+			Text(L10n.detailsForks)
 		}
 	}
 
@@ -80,7 +80,7 @@ struct RepositoryView: View {
 		LabeledContent {
 			Text(viewModel.repository.openIssuesCount?.description ?? "")
 		} label: {
-			Text("Issues")
+			Text(L10n.detailsIssues)
 		}
 	}
 
@@ -88,7 +88,7 @@ struct RepositoryView: View {
 		LabeledContent {
 			Text(viewModel.repository.stargazersCount?.description ?? "")
 		} label: {
-			Text("Starred by")
+			Text(L10n.detailsStarred)
 		}
 	}
 
@@ -96,7 +96,7 @@ struct RepositoryView: View {
 		LabeledContent {
 			Text(viewModel.releaseVersion)
 		} label: {
-			Text("Last release version")
+			Text(L10n.detailsRelease)
 		}
 	}
 }
