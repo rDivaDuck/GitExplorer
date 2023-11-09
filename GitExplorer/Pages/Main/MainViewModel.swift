@@ -12,6 +12,7 @@ class MainViewModel: ObservableObject {
 
 	@Published var searchText: String = ""
 
+	@Published var resultCount: Int = 0
 	@Published var repositories: [Repository] = []
 
 	private var subscriptions = Set<AnyCancellable>()
@@ -40,6 +41,7 @@ class MainViewModel: ObservableObject {
 			switch result {
 				case .success(let searchResult):
 					DispatchQueue.main.async { [weak self] in
+						self?.resultCount = searchResult.totalCount ?? 0
 						self?.repositories = searchResult.repositories ?? []
 					}
 				case .failure(let failure):
