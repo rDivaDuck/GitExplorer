@@ -14,6 +14,8 @@ struct MainView: View {
 
 	var body: some View {
 		ScrollView {
+			SearchTextField(searchText: $viewModel.searchText)
+				.padding(.horizontal, 20)
 			LazyVStack(spacing: 24) {
 				ForEach(viewModel.repositories) { repo in
 					Button {
@@ -24,7 +26,6 @@ struct MainView: View {
 					}
 				}
 			}
-			.searchable(text: $viewModel.searchText, prompt: Text("search something"))
 		}.onAppear {
 			viewModel.searchText = "stra"
 		}
