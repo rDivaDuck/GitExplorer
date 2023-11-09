@@ -16,8 +16,7 @@ struct MainView: View {
 		VStack(spacing: 0) {
 			searchField
 			if viewModel.repositories.isEmpty {
-				ContentUnavailableView("No repos", systemImage: "heart", description: Text("no repos found yet"))
-					.symbolVariant(.slash)
+				EmptyStateView()
 			} else {
 				ScrollView {
 					resultsCount
