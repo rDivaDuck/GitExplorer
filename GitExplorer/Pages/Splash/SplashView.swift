@@ -21,6 +21,9 @@ struct SplashView: View {
 		}
 		.ignoresSafeArea(.all)
 		.accessibilityHidden(true)
+		.task {
+			await viewModel.fetch()
+		}
 	}
 }
 
