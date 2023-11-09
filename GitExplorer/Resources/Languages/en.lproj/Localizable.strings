@@ -1,0 +1,8 @@
+/* 
+  Localizable.strings
+  GitExplorer
+
+  Copyright © 2023 Rasmus Hilleke.
+*/
+
+"welcome" = "Hello World!";

@@ -1,0 +1,184 @@
+stages:
+  - build_dependencies
+  - build
+  - deploy
+  - notify
+  - test
+
+
+# Stage: build_dependencies
+###########################
+
+# Define build number, version number from a manually tagged build (save in files "build_num", "version_num")
+build_num:
+  stage: build_dependencies
+  script:
+    |
+    if [[ "$CI_PIPELINE_SOURCE" == "schedule" ]]; then
+    # Build number
+    echo $((`git tag -l *_$(echo $VERSION_NUMBER)* | sed -E "s/.*([0-9]+)$/\1/g" | sort -n | tail -n 1`+1)) > build_num
+    echo "Setting build number to `cat build_num`"
+
+    # Version number
+    echo $VERSION_NUMBER > version_num
+    echo "Setting version number to `cat version_num`"
+    else
+    # Build number
+    echo $(echo $CI_COMMIT_REF_NAME | sed -E 's/.+_([0-9]+)$/\1/g') > build_num
+    echo "Setting build number to `cat build_num`"
+
+    # Version number
+    echo $(echo $CI_COMMIT_REF_NAME | sed -E 's/.+_([0-9,\.]+)_[0-9]+$/\1/g') > version_num
+    echo "Setting version number to `cat version_num`"
+    fi
+  only:
+    - schedule
+    - /^Build_([0-9,\.]+)_[0-9]+$/
+  artifacts:
+    paths:
+      - build_num
+      - version_num
+
+# Stage: test
+#############
+
+# Lint runs always
+lint:
+  stage: test
+  rules:
+    - when: always
+  script:
+    # Run SwiftLint and output in codeclimate format. If there's an error also output to console.
+    - mint run swiftlint --quiet --reporter codeclimate > swiftlint.json || 
+      mint run swiftlint --quiet --reporter emoji
+  artifacts:
+    reports:
+      codequality:
+        - swiftlint.json
+    expire_in: 1 month
+
+# Unit Tests runs only on merge requests – not on tagged or schedule-triggered builds
+unit_test:
+  stage: test
+  only:
+    - merge_requests
+  script:
+    - fastlane unit_test
+  artifacts:
+    reports:
+      junit: AgreenaTests.xml
+    expire_in: 1 month
+
+
+# Stage: build
+##############
+
+# Beta
+beta_build:
+  stage: build
+  script:
+    # Get BUILD_NUM, VERSION_NUM from previously set artifacts
+    - export BUILD_NUM=$(cat build_num)
+    - export VERSION_NUM=$(cat version_num)
+    - fastlane beta_build
+  only:
+    - /^Build_([0-9,\.]+)_[0-9]+$/
+    - schedules
+  artifacts:
+    paths:
+      - "*.ipa"
+      - "*.dSYM.zip"
+    expire_in: 1 day
+  needs: ["build_num"]
+
+# Release
+release_build:
+  stage: build
+  script:
+    # Get BUILD_NUM, VERSION_NUM from previously set artifacts
+    - export BUILD_NUM=$(cat build_num)
+    - export VERSION_NUM=$(cat version_num)
+    - fastlane release_build
+  only:
+    - /^Build_([0-9,\.]+)_[0-9]+$/
+    - schedules
+  artifacts:
+    paths:
+      - "*.ipa"
+      - "*.dSYM.zip"
+    expire_in: 1 week
+  needs: ["build_num"]
+
+
+# Stage: deploy
+###############
+
+# Add tag if triggered from schedule
+tag_build:
+  stage: deploy
+  only:
+    - schedules # Only run on scheduled builds; tag-triggered builds are already tagged
+  script:
+    # Always use $VERSION_NUMBER since this job is only triggered from schedules
+    - export BUILD_NUM=$(cat build_num)
+    - export TAG=`echo $VERSION_NUMBER`_`echo $BUILD_NUM`
+    - echo "Tagging build as $TAG"
+    - export CI_PUSH_REPO=`echo $CI_REPOSITORY_URL | perl -pe 's#.*@(.+?(\:\d+)?)/#git@\1:#'`   # Convert the https gitlab runner URL to a normal git@... repo URL
+    - git remote set-url --push origin "${CI_PUSH_REPO}"
+    - git tag -a $TAG -m "$TAG autotagged"
+    - git push origin $TAG
+  needs: ["build_num","beta_build","release_build"]
+
+# Upload Beta to app store
+beta_upload:
+  stage: deploy
+  environment:
+    name: "App Store"
+  only:
+    - /^Build_[0-9,\.]+_[0-9]+$/
+  script:
+    - xcrun altool --upload-app -f "`ls *.ipa`" -u $APP_STORE_USERNAME -p $APP_STORE_PASSWORD --type ios
+  needs: ["beta_build"]
+
+# Upload to App Store Connect
+app_store_upload:
+  stage: deploy
+  environment:
+    name: "App Store"
+  only:
+    - /^Build_[0-9,\.]+_[0-9]+$/
+    - schedules
+  when: manual
+  allow_failure: false
+  script:
+    - xcrun altool --upload-app -f "`ls *.ipa`" -u $APP_STORE_USERNAME -p $APP_STORE_PASSWORD --type ios
+  needs: ["release_build"]
+
+# Stage: notify
+###############
+
+# Post success to Slack
+slack_post_success:
+  stage: notify
+  only:
+    - /^Build_[0-9,\.]+_[0-9]+$/
+    - schedules
+  when: on_success
+  script:
+    - export BUILD_NUM=$(cat build_num)
+    - export VERSION_NUM=$(cat version_num)
+    - fastlane slack_post success:true
+  needs: ["build_num","beta_upload"]
+
+# Post failure to Slack
+slack_post_failure:
+  stage: notify
+  only:
+    - /^Build_[0-9,\.]+_[0-9]+$/
+    - schedules
+  when: on_failure
+  script:
+    - export BUILD_NUM=$(cat build_num)
+    - export VERSION_NUM=$(cat version_num)
+    - fastlane slack_post success:false
+  needs: ["build_num","beta_upload"]

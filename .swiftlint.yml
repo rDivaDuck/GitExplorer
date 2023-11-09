@@ -1,0 +1,106 @@
+disabled_rules: # rule identifiers to exclude from running
+  - line_length
+  - force_cast  # replaced by custom
+  - force_try   # replaced by custom
+  - todo        # replaced by custom
+
+opt_in_rules:
+  - implicit_return
+
+custom_rules:
+    swiftlint_disable_unsigned:
+        name: "Swiftlint Disable without Comment"
+        message: "Disabling Swiftlint rules require explanation and signature."
+        regex: '//\s*swiftlint:disable(?![^\n]*\s+-\s+[^\n]*-[A-Z/]{3,})'
+        severity: error
+
+    use_tabs:
+        # Use tabs; not spaces for indentation
+        name: "Indentation using Tabs"
+        include: ".*\\.(swift|m|h)"
+        regex: "^  +"
+        message: "Use tabs for indentation"
+        severity: warning
+
+    force_cast_custom:
+        # Modified force_cast: using "as!" is only ok if the line ends with an explanatory comment and signature (-RAH)
+        name: "Forced Cast"
+        regex: "as!(?!.*//.*-[A-Z/]{3,}$)"
+        message: "Forced cast must be followed by explanatory comment and signature (-ABC)"
+        severity: error
+
+    force_try_custom:
+        # Modified force_try: using "try!" is only ok if the line ends with an explanatory comment and signature (-RAH)
+        name: "Force Try"
+        regex: "try!(?!.*//.*-[A-Z/]{3,}$)"
+        message: "Force try must be followed by explanatory comment and signature (-ABC)"
+        severity: error
+
+    old_todo:
+        # Don't use the old "/// TODO" format: use two slashes instead for proper Xcode markup
+        name: "Old TODO"
+        regex: "/// TODO"
+        message: "Use two slashes before \"TODO\" for proper Xcode highlighting."
+
+    todo_custom:
+        # TODOs must be "signed"
+        name: "Unsigned TODO"
+        regex: "// [tT][oO][dD][oO]((?!-[A-Z/]{3,}).)*$"
+        message: "TODOs must be \"signed\" by adding uppercase initials preceded by hyphen."
+        severity: error
+
+    comment_space:
+        # // must be followed by one space
+        name: "Comment Format"
+        regex: "[^:^]/{2,3}[^\\s/]"
+        message: "One space after // and ///"
+        severity: warning
+
+file_length:
+    - 500 # warning
+    - 800 # error
+
+implicit_return:
+  severity: warning
+  included:
+    - getter
+    - closure
+    - function
+
+large_tuple: 3
+cyclomatic_complexity:
+    warning: 15
+    ignores_case_statements: true
+
+switch_case_alignment:
+  indented_cases: true
+
+# Allowed to use "id" even though it is not >= 3 characters length
+identifier_name:
+  excluded:
+    - x
+    - y
+    - to
+    - id
+    - in
+    - da
+    - en
+
+# Allowed to use "T" and "U" for generics
+type_name:
+  excluded:
+    - T
+    - U
+
+excluded: # paths to ignore during linting. Takes precedence over `included`.
+  - Externals
+  - GitExplorer/Generated
+  - Sources
+  - "*cookiecutter.project_name*"
+  - .swiftpm
+  - .build
+
+
+# configurable rules can be customized from this configuration file
+
+reporter: "xcode" # reporter type (xcode, json, csv, checkstyle, junit, html, emoji)
