@@ -25,4 +25,9 @@ struct GithubAPI: API {
 	static func search(for query: String) async -> Result<RepositorySearchResult, APIError> {
 		await Result.catching { try await get(from: GithubEndpoints.Repositories.search(query)) }
 	}
+
+	static func tags(for repository: Repository) async -> Result<[RepositoryTag], APIError> {
+		guard let fullName = repository.fullName else { return .failure(APIError.unsupportedURL) }
+		return await Result.catching { try await get(from: GithubEndpoints.Repositories.tags(fullName)) }
+	}
 }
