@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct MainView: View {
+struct SearchView: View {
 
 	let coordinator: MainCoordinator
-	@ObservedObject var viewModel: MainViewModel
+	@ObservedObject var viewModel: SearchViewModel
 
 	var body: some View {
 		VStack(spacing: 0) {
@@ -40,6 +40,7 @@ struct MainView: View {
 			}, label: {
 				RepositoryCell(repository: repo)
 			})
+			.buttonStyle(.scaling)
 		}
 	}
 
@@ -66,6 +67,6 @@ struct MainView: View {
 
 #Preview {
 	NavigationStack {
-		MainView(coordinator: .preview(), viewModel: .preview())
+		SearchView(coordinator: .preview(), viewModel: .preview())
 	}
 }

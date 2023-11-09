@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 
-class MainViewModel: ObservableObject {
+class SearchViewModel: ObservableObject {
 
 	@Published var searchText: String = ""
 
@@ -52,8 +52,8 @@ class MainViewModel: ObservableObject {
 
 }
 
-extension MainViewModel: Previewable {
-	static func preview() -> MainViewModel {
-		MainViewModel()
+extension SearchViewModel: Previewable {
+	static func preview() -> SearchViewModel {
+		SearchViewModel()
 	}
 }
