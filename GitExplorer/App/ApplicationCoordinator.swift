@@ -49,10 +49,4 @@ class ApplicationCoordinator: Coordinator {
 		mainCoordinator.start()
 		self.childCoordinators = [mainCoordinator]
 	}
-
-	/// On signout, child coordinators should not be retained,
-	/// they should be allowed to deinit.
-	private func resetChildCoordinators() {
-		self.childCoordinators.removeAll()
-	}
 }

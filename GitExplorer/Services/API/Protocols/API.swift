@@ -170,7 +170,6 @@ extension API {
 		}
 
 		do {
-			//			print("***", data.formattedJSON)
 			return try jsonDecoder.decode(R.self, from: data)
 		} catch {
 			throw APIError.decoding(error: error)

@@ -31,6 +31,7 @@ struct SearchView: View {
 	var searchField: some View {
 		SearchTextField(searchText: $viewModel.searchText)
 			.padding(.horizontal, 20)
+			.padding(.top, 14)
 	}
 
 	var results: some View {
