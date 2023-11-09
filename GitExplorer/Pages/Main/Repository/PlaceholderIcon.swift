@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PlaceholderIcon: View {
 	var body: some View {
-		Image(Asset.Images.Placeholder.icon)
+		Image(Asset.Images.Icons.placeholder)
 			.resizable()
 			.scaledToFit()
 	}

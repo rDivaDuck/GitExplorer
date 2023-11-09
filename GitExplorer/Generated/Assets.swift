@@ -36,8 +36,11 @@ internal enum Asset {
     }
   }
   internal enum Images {
+    internal enum Icons {
+      internal static let empty = ImageAsset(name: "Icons/Empty")
+      internal static let placeholder = ImageAsset(name: "Icons/Placeholder")
+    }
     internal enum Placeholder {
-      internal static let icon = ImageAsset(name: "Placeholder/Icon")
       internal static let rDuck = ImageAsset(name: "Placeholder/rDuck")
       internal static let rDuckNegative = ImageAsset(name: "Placeholder/rDuckNegative")
     }
