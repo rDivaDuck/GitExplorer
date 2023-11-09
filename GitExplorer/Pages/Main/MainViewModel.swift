@@ -12,7 +12,7 @@ class MainViewModel: ObservableObject {
 
 	@Published var searchText: String = ""
 
-	@Published var repositories: [Item] = []
+	@Published var repositories: [Repository] = []
 
 	private var subscriptions = Set<AnyCancellable>()
 
@@ -39,7 +39,7 @@ class MainViewModel: ObservableObject {
 			switch result {
 				case .success(let searchResult):
 					DispatchQueue.main.async { [weak self] in
-						self?.repositories = searchResult.items ?? []
+						self?.repositories = searchResult.repositories ?? []
 					}
 				case .failure(let failure):
 					print(failure)

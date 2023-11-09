@@ -15,13 +15,12 @@ struct MainView: View {
 	var body: some View {
 		ScrollView {
 			LazyVStack {
-				Button {
-					coordinator.showRepo(with: .random())
-				} label: {
-					Text("Hello, World!")
-				}
 				ForEach(viewModel.repositories) { repo in
-					Text(repo.name ?? "")
+					Button {
+						coordinator.present(repo)
+					} label: {
+						Text(repo.name ?? "")
+					}
 				}
 			}
 			.searchable(text: $viewModel.searchText, prompt: Text("search something"))
