@@ -9,19 +9,24 @@ import SwiftUI
 
 struct SplashView: View {
 
+	@ObservedObject var viewModel: SplashViewModel
+
 	var body: some View {
 		ZStack {
-			Color(Asset.Colors.Background.primary)
+			Color(Asset.Colors.Primary.background)
 			Image(Asset.Images.Placeholder.rDuck)
 				.resizable()
 				.scaledToFit()
-				.frame(width: 200)
+				.frame(height: 149)
 		}
 		.ignoresSafeArea(.all)
 		.accessibilityHidden(true)
+		.task {
+			await viewModel.fetch()
+		}
 	}
 }
 
 #Preview {
-	SplashView()
+	SplashView(viewModel: .preview())
 }

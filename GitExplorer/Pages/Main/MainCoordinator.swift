@@ -27,10 +27,17 @@ class MainCoordinator: NSObject, Coordinator {
 	}
 
 	func showMain() {
-		let mainView = Color.blue.ignoresSafeArea()
+		let mainView = MainView(coordinator: self)
 		let mainViewController = UIHostingController(rootView: mainView)
 		rootViewController = mainViewController
 		navigationController.navigationBar.prefersLargeTitles = true
 		navigationController.setViewControllers([rootViewController], animated: false)
+	}
+
+	func showRepo(with color: Color) {
+		let repoView = RepositoryView(color: color)
+		let viewController = UIHostingController(rootView: repoView)
+		viewController.navigationItem.backButtonDisplayMode = .default
+		navigationController.pushViewController(viewController, animated: true)
 	}
 }
