@@ -25,7 +25,7 @@ enum GithubEndpoints {
 		var parameters: [URLQueryItem]? {
 			switch self {
 				case .search(let query):
-					return [URLQueryItem(name: "q", value: query)]
+					return [URLQueryItem(name: "per_page", value: "100"), URLQueryItem(name: "q", value: query)]
 				case .tags:
 					return []
 			}

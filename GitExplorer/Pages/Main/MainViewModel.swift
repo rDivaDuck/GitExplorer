@@ -26,6 +26,7 @@ class MainViewModel: ObservableObject {
 			.removeDuplicates()
 			.filter { $0.count > 2 }
 			.debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
+			.compactMap { $0.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) }
 			.print("*")
 			.sink { [weak self] query in
 				self?.search(for: query)
