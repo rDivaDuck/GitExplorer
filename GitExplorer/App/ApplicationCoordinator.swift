@@ -30,7 +30,7 @@ class ApplicationCoordinator: Coordinator {
 	func start() {
 		splashViewModel.$dismiss
 			.compactMap { $0 }
-			.filter { $0 == true }
+			.filter { $0 }
 			.removeDuplicates()
 			.receive(on: DispatchQueue.main)
 			.sink { [weak self] _ in
@@ -48,11 +48,5 @@ class ApplicationCoordinator: Coordinator {
 		let mainCoordinator = MainCoordinator(navigationController: navigationController)
 		mainCoordinator.start()
 		self.childCoordinators = [mainCoordinator]
-	}
-
-	/// On signout, child coordinators should not be retained,
-	/// they should be allowed to deinit.
-	private func resetChildCoordinators() {
-		self.childCoordinators.removeAll()
 	}
 }

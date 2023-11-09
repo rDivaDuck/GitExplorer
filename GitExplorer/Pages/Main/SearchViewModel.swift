@@ -8,7 +8,7 @@
 import SwiftUI
 import Combine
 
-class MainViewModel: ObservableObject {
+class SearchViewModel: ObservableObject {
 
 	@Published var searchText: String = ""
 
@@ -28,7 +28,6 @@ class MainViewModel: ObservableObject {
 			.filter { $0.count > 2 }
 			.debounce(for: .seconds(0.5), scheduler: DispatchQueue.main)
 			.compactMap { $0.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) }
-			.print("*")
 			.sink { [weak self] query in
 				self?.search(for: query)
 			}
@@ -52,8 +51,8 @@ class MainViewModel: ObservableObject {
 
 }
 
-extension MainViewModel: Previewable {
-	static func preview() -> MainViewModel {
-		MainViewModel()
+extension SearchViewModel: Previewable {
+	static func preview() -> SearchViewModel {
+		SearchViewModel()
 	}
 }

@@ -7,10 +7,10 @@
 
 import SwiftUI
 
-struct MainView: View {
+struct SearchView: View {
 
 	let coordinator: MainCoordinator
-	@ObservedObject var viewModel: MainViewModel
+	@ObservedObject var viewModel: SearchViewModel
 
 	var body: some View {
 		VStack(spacing: 0) {
@@ -22,7 +22,7 @@ struct MainView: View {
 			}
 		}.toolbar {
 			ToolbarItem(placement: .topBarLeading) {
-				Text("Repository Library")
+				Text(L10n.searchTitle)
 					.font(.system(size: 20, weight: .semibold))
 			}
 		}
@@ -31,6 +31,7 @@ struct MainView: View {
 	var searchField: some View {
 		SearchTextField(searchText: $viewModel.searchText)
 			.padding(.horizontal, 20)
+			.padding(.top, 14)
 	}
 
 	var results: some View {
@@ -40,11 +41,12 @@ struct MainView: View {
 			}, label: {
 				RepositoryCell(repository: repo)
 			})
+			.buttonStyle(.scaling)
 		}
 	}
 
 	var resultsCount: some View {
-		Text("\(viewModel.resultCount) results")
+		Text(L10n.searchResults(viewModel.resultCount))
 			.frame(maxWidth: .infinity, alignment: .leading)
 			.font(.system(size: 14))
 			.foregroundStyle(Color(Asset.Colors.Secondary.text))
@@ -66,6 +68,6 @@ struct MainView: View {
 
 #Preview {
 	NavigationStack {
-		MainView(coordinator: MainCoordinator(navigationController: UINavigationController()), viewModel: .preview())
+		SearchView(coordinator: .preview(), viewModel: .preview())
 	}
 }

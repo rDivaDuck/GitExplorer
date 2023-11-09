@@ -27,17 +27,29 @@ class MainCoordinator: NSObject, Coordinator {
 	}
 
 	func showMain() {
-		let mainView = MainView(coordinator: self, viewModel: MainViewModel())
+		let delegate = CrossFadeNavigationControllerDelegate()
+		navigationController.delegate = delegate
+		let mainView = SearchView(coordinator: self, viewModel: SearchViewModel())
 		let mainViewController = UIHostingController(rootView: mainView)
 		rootViewController = mainViewController
 		navigationController.navigationBar.isHidden = false
-		navigationController.setViewControllers([rootViewController], animated: false)
+		navigationController.setViewControllers([rootViewController], animated: true)
 	}
 
 	func present(_ repository: Repository) {
-		let repositoryView = RepositoryView(viewModel: RepositoryViewModel(repository))
+		let repositoryView = RepositoryView(coordinator: self, viewModel: RepositoryViewModel(repository))
 		let viewController = UIHostingController(rootView: repositoryView)
-		viewController.navigationItem.backButtonDisplayMode = .default
+		viewController.navigationItem.hidesBackButton = true
 		navigationController.pushViewController(viewController, animated: true)
+	}
+
+	func back() {
+		navigationController.popViewController(animated: true)
+	}
+}
+
+extension MainCoordinator: Previewable {
+	static func preview() -> MainCoordinator {
+		MainCoordinator(navigationController: UINavigationController())
 	}
 }

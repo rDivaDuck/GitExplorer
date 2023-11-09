@@ -9,6 +9,7 @@ import SwiftUI
 
 struct RepositoryView: View {
 
+	let coordinator: MainCoordinator
 	@ObservedObject var viewModel: RepositoryViewModel
 
 	var body: some View {
@@ -17,26 +18,25 @@ struct RepositoryView: View {
 			infoStack
 			Spacer()
 		}
+		.navigationBarBackButtonHidden(true)
+		.toolbar {
+			ToolbarItem(placement: .topBarLeading) {
+				Button(action: {
+					coordinator.back()
+				}, label: {
+					Image(Asset.Images.Icons.arrow)
+						.frame(width: 24, height: 24)
+						.contentShape(Rectangle())
+				})
+			}
+		}
 	}
 
 	var header: some View {
 		VStack(spacing: 0) {
-			AsyncImage(
-				url: URL(string: viewModel.repository.owner?.avatarURL ?? ""),
-				content: { image in
-					image
-						.resizable()
-						.scaledToFit()
-						.frame(maxHeight: 100)
-						.cornerRadius(6)
-				},
-				placeholder: {
-					PlaceholderIcon()
-						.frame(maxHeight: 100)
-				}
-			)
+			GitImageView(urlString: viewModel.repository.owner?.avatarURL, height: 100)
 			.accessibilityHidden(true)
-			Text("\(viewModel.repository.name ?? "") / \(viewModel.repository.owner?.name ?? "")")
+			Text(L10n.detailsRepositoryTitle(viewModel.repository.owner?.name ?? "", viewModel.repository.name ?? ""))
 				.font(.system(size: 16, weight: .medium))
 				.foregroundColor(Color(Asset.Colors.Primary.text))
 				.padding(.top, 14)
@@ -50,11 +50,11 @@ struct RepositoryView: View {
 	var infoStack: some View {
 		VStack(spacing: 14) {
 			forks
-			Divider()
+			GitDivider()
 			issues
-			Divider()
+			GitDivider()
 			starred
-			Divider()
+			GitDivider()
 			lastRelease
 		}
 		.foregroundColor(Color(Asset.Colors.Primary.text))
@@ -62,7 +62,7 @@ struct RepositoryView: View {
 		.padding(20)
 		.overlay(
 			RoundedRectangle(cornerRadius: 8)
-				.stroke(Color(Asset.Colors.Primary.divider), lineWidth: 1)
+				.stroke(Color(Asset.Colors.Primary.divider), lineWidth: 0.5)
 		)
 		.padding(.horizontal, 20)
 		.padding(.top, 30)
@@ -72,7 +72,7 @@ struct RepositoryView: View {
 		LabeledContent {
 			Text(viewModel.repository.forksCount?.description ?? "")
 		} label: {
-			Text("Forks")
+			Text(L10n.detailsForks)
 		}
 	}
 
@@ -80,7 +80,7 @@ struct RepositoryView: View {
 		LabeledContent {
 			Text(viewModel.repository.openIssuesCount?.description ?? "")
 		} label: {
-			Text("Issues")
+			Text(L10n.detailsIssues)
 		}
 	}
 
@@ -88,7 +88,7 @@ struct RepositoryView: View {
 		LabeledContent {
 			Text(viewModel.repository.stargazersCount?.description ?? "")
 		} label: {
-			Text("Starred by")
+			Text(L10n.detailsStarred)
 		}
 	}
 
@@ -96,11 +96,11 @@ struct RepositoryView: View {
 		LabeledContent {
 			Text(viewModel.releaseVersion)
 		} label: {
-			Text("Last release version")
+			Text(L10n.detailsRelease)
 		}
 	}
 }
 
 #Preview {
-	RepositoryView(viewModel: .preview())
+	RepositoryView(coordinator: .preview(), viewModel: .preview())
 }

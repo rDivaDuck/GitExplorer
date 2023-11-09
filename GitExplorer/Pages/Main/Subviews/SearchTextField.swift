@@ -13,13 +13,14 @@ struct SearchTextField: View {
 
 	var body: some View {
 		HStack {
-			Image(systemName: "magnifyingglass")
+			Image(Asset.Images.Icons.spyglass)
+				.padding(.horizontal, 15)
 			TextField(text: $searchText) {
-				Text("Search for repository")
+				Text(L10n.searchPrompt)
 			}
 			.frame(maxWidth: .infinity)
 		}
-		.padding(8)
+		.padding(.vertical, 14)
 		.background {
 			Color(Asset.Colors.Primary.search)
 		}
