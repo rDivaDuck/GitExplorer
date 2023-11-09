@@ -9,13 +9,13 @@ import SwiftUI
 
 struct RepositoryView: View {
 
-	let color: Color
+	let repository: Repository
 
 	var body: some View {
-		color
+		Text(repository.name ?? "")
 	}
 }
 
 #Preview {
-	RepositoryView(color: .random())
+	RepositoryView(repository: .preview())
 }
