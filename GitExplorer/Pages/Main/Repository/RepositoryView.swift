@@ -20,10 +20,29 @@ struct RepositoryView: View {
 	}
 
 	var header: some View {
-		Image(systemName: "pencil.circle.fill")
-			.resizable()
-			.scaledToFit()
-			.frame(height: 150)
+		VStack(spacing: 0) {
+			AsyncImage(
+				url: URL(string: repository.owner?.avatarURL ?? ""),
+				content: { image in
+					image
+						.resizable()
+						.scaledToFit()
+						.frame(maxHeight: 100)
+						.cornerRadius(6)
+				},
+				placeholder: {
+					PlaceholderIcon()
+						.frame(maxHeight: 100)
+				}
+			)
+			Text("\(repository.name ?? "") / \(repository.owner?.name ?? "")")
+				.font(.system(size: 16, weight: .medium))
+				.padding(.top, 14)
+			Text(repository.language ?? "")
+				.font(.system(size: 14))
+				.foregroundStyle(Color(Asset.Colors.Secondary.text))
+				.padding(.top, 6)
+		}
 	}
 
 	var infoStack: some View {
@@ -32,12 +51,13 @@ struct RepositoryView: View {
 			Divider()
 			issues
 			Divider()
-			issues
+			starred
 			Divider()
 			Text("Last updated")
 				.frame(maxWidth: .infinity, alignment: .leading)
 		}
 		.foregroundColor(Color(Asset.Colors.Primary.text))
+		.font(.system(size: 14))
 		.padding(20)
 		.overlay(
 			RoundedRectangle(cornerRadius: 8)
