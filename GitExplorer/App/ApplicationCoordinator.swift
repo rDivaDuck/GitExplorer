@@ -14,19 +14,29 @@ class ApplicationCoordinator: Coordinator {
 	let mainWindow: UIWindow
 
 	private var childCoordinators = [Coordinator]()
-
 	private var navigationController: UINavigationController?
+	private var subscriptions = Set<AnyCancellable>()
+
+	@ObservedObject private var splashViewModel = SplashViewModel()
 
 	init(window: UIWindow) {
 		self.mainWindow = window
-		let contentViewController = UIHostingController(rootView: SplashView())
+		let contentViewController = UIHostingController(rootView: SplashView(viewModel: splashViewModel))
 		navigationController = UINavigationController(rootViewController: contentViewController)
 		navigationController?.navigationBar.isHidden = true
 		self.mainWindow.rootViewController = navigationController
 	}
 
 	func start() {
-		showMain()
+		splashViewModel.$dismiss
+			.compactMap { $0 }
+			.filter { $0 == true }
+			.removeDuplicates()
+			.receive(on: DispatchQueue.main)
+			.sink { [weak self] _ in
+				self?.showMain()
+			}
+			.store(in: &subscriptions)
 	}
 
 	private func showMain() {
