@@ -35,6 +35,7 @@ struct RepositoryView: View {
 						.frame(maxHeight: 100)
 				}
 			)
+			.accessibilityHidden(true)
 			Text("\(viewModel.repository.name ?? "") / \(viewModel.repository.owner?.name ?? "")")
 				.font(.system(size: 16, weight: .medium))
 				.foregroundColor(Color(Asset.Colors.Primary.text))

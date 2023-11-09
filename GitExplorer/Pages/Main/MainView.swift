@@ -13,15 +13,20 @@ struct MainView: View {
 	@ObservedObject var viewModel: MainViewModel
 
 	var body: some View {
-		ScrollView {
+		VStack(spacing: 0) {
 			searchField
-			resultsCount
-			LazyVStack(spacing: 24) {
-				results
+			if viewModel.repositories.isEmpty {
+				ContentUnavailableView("No repos", systemImage: "heart", description: Text("no repos found yet"))
+					.symbolVariant(.slash)
+			} else {
+				ScrollView {
+					resultsCount
+					LazyVStack(spacing: 24) {
+						results
+					}
+					.padding(.horizontal, 20)
+				}
 			}
-			.padding(.horizontal, 20)
-		}.onAppear {
-			viewModel.searchText = "stra"
 		}.toolbar {
 			ToolbarItem(placement: .topBarLeading) {
 				Text("Repository Library")

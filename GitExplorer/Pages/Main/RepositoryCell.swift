@@ -27,6 +27,7 @@ struct RepositoryCell: View {
 						.frame(maxHeight: 42)
 				}
 			)
+			.accessibilityHidden(true)
 			VStack(alignment: .leading, spacing: 4) {
 				Text(repository.name ?? "")
 					.font(.system(size: 16, weight: .medium))
