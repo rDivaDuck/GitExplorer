@@ -30,7 +30,7 @@ class ApplicationCoordinator: Coordinator {
 	func start() {
 		splashViewModel.$dismiss
 			.compactMap { $0 }
-			.filter { $0 == true }
+			.filter { $0 }
 			.removeDuplicates()
 			.receive(on: DispatchQueue.main)
 			.sink { [weak self] _ in

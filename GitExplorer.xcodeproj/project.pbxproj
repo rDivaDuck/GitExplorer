@@ -239,7 +239,6 @@
 		3A7D19142AFD4B93009467F5 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
-				3A7D18FE2AFD32BF009467F5 /* PlaceholderIcon.swift */,
 				3A7D19042AFD3734009467F5 /* RepositoryCell.swift */,
 				3A7D19062AFD38AA009467F5 /* SearchTextField.swift */,
 				3A7D19082AFD412D009467F5 /* EmptyStateView.swift */,
@@ -296,6 +295,7 @@
 		3AC499272ABF53F500B718C4 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				3A7D18FE2AFD32BF009467F5 /* PlaceholderIcon.swift */,
 				3A7D190B2AFD46FF009467F5 /* GitDivider.swift */,
 				3A7D190D2AFD475A009467F5 /* GitImageView.swift */,
 			);
