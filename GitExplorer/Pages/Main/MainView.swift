@@ -14,22 +14,25 @@ struct MainView: View {
 
 	var body: some View {
 		ScrollView {
-			LazyVStack {
+			LazyVStack(spacing: 24) {
 				ForEach(viewModel.repositories) { repo in
 					Button {
 						coordinator.present(repo)
 					} label: {
-						Text(repo.name ?? "")
+						RepositoryCell(repository: repo)
+							.padding(.horizontal, 20)
 					}
 				}
 			}
 			.searchable(text: $viewModel.searchText, prompt: Text("search something"))
 		}.onAppear {
-//			viewModel.searchText = "stra"
+			viewModel.searchText = "stra"
 		}
 	}
 }
 
 #Preview {
-	MainView(coordinator: MainCoordinator(navigationController: UINavigationController()), viewModel: .preview())
+	NavigationStack {
+		MainView(coordinator: MainCoordinator(navigationController: UINavigationController()), viewModel: .preview())
+	}
 }
